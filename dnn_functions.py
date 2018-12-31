@@ -34,11 +34,11 @@ def linear_forward(A,W,b):
 	cache - python dict with A,W,b for backward pass
 	"""
 	
-	Z = W.dot(A) = b
+	Z = W.dot(A) + b
 	cache = (A,W,b)
 	return Z,cache
 
-def linear_activation_forward(A_prev,W,b,activation)
+def linear_activation_forward(A_prev,W,b,activation):
 	"""
 	Implement forward pass for one layer (linear->activation (sigmoid/relu/etc.)
 	
@@ -53,14 +53,14 @@ def linear_activation_forward(A_prev,W,b,activation)
 	if activation == "sigmoid":
 		A,activation_cache = sigmoid(Z)
 	
-	elif activation == "relu"
+	elif activation == "relu":
 		A,activation_cache = relu(Z)
 	
 	cache = (linear_cache,activation_cache)
 	
 	return A,cache
 	
-def L_model_forward(X,parameters)
+def L_model_forward(X,parameters):
 	"""
 	Implement one complete forward pass for Neural Network where structure is
 	[Linear->ReLU]*(L-1)  --> Linear->Sigmoid 
@@ -234,7 +234,7 @@ def predict(X,y,parameters):
 	
 	m = X.shape[1]
 	n = len(parameters) // 2 # no of layers in NN
-	p = np.zeros(1,m))
+	p = np.zeros((1,m))
 	
 	# use forward pass to compute
 	probs,caches = L_model_forward(X,parameters)

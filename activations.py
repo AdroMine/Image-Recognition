@@ -11,7 +11,7 @@ def sigmoid(Z):
 	A - sigmoid of Z
 	cache - returns original Z as well which will come in handy during backward propagation
 	"""
-	A = 1/(1+np.eZp(-Z))
+	A = 1/(1+np.exp(-Z))
 	cache = Z
 	return A,cache
 
@@ -30,7 +30,7 @@ def sigmoid_backwards(dA,cache):
 	Z = cache
 	s = 1/(1+np.exp(-Z))
 	dZ = dA * s * (1-s)
-	return(Z)
+	return(dZ)
 	
 	
 	
@@ -65,7 +65,6 @@ def relu_backward(dA,cache):
 	dZ = np.array(dA,copy = True)
 	dZ[dZ<=0] = 0
 	
+	#assert(dZ.shape == Z.shape)
 	return dZ
 
-	
-	

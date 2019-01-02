@@ -1,5 +1,73 @@
 import numpy as np
 
+def sigmoid(Z):
+	"""
+	Compute the sigmoid of Z
+	
+	Argument:
+	Z - a scalar or numpy array
+	
+	Returns:
+	A - sigmoid of Z
+	cache - returns original Z as well which will come in handy during backward propagation
+	"""
+	A = 1/(1+np.exp(-Z))
+	cache = Z
+	return A,cache
+
+def sigmoid_backwards(dA,cache):
+	"""
+	Implement gradient descent for single sigmoid unit
+	
+	Arguments:
+	dA - post-activation gradient (any shape)
+	cache - from forward prop (Z)
+	
+	Returns:
+	dZ - gradient of the cost with respect to Z (dJ/dZ)
+	"""
+	
+	Z = cache
+	s = 1/(1+np.exp(-Z))
+	dZ = dA * s * (1-s)
+	return(dZ)
+	
+	
+	
+def relu(Z):
+	"""
+	Compute the Rectified Linear Unit (ReLU) of Z
+	
+	Arguments :
+	Z - a scalar or numpy array
+	
+	Returns:
+	A - ReLU of Z (same shape)
+	cache - to use during backward prop
+	"""
+	A = np.maximum(0,Z)
+	cache = Z
+	return A,cache
+	
+def relu_backward(dA,cache):
+	"""
+	Implement gradient descent for single ReLU unit
+	
+	Arguments:
+	dA - post-activation gradient (any shape)
+	cache - from forward prop (Z)
+	
+	Returns:
+	dZ - gradient of the cost with respect to Z (dJ/dZ)
+	"""
+	
+	Z = cache
+	dZ = np.array(dA,copy = True)
+	dZ[Z <= 0] = 0
+	
+	#assert(dZ.shape == Z.shape)
+	return dZ
+
 def initialise_parameters_deep(layer_dims):
 	"""
 	Arguments:
@@ -16,8 +84,8 @@ def initialise_parameters_deep(layer_dims):
 	
 	for l in range(1,L):
 		parameters["W"+str(l)] = np.random.randn(layer_dims[l],layer_dims[l-1]) / np.sqrt(layer_dims[l-1]) # or could also use * 0.01
-		parameters["b"+str(l)] = np.zeros(layer_dims[l],1)
-		
+		parameters['b'+str(l)] = np.zeros( ((layer_dims[l],1)) )
+	
 	return parameters
 
 def linear_forward(A,W,b):
@@ -155,10 +223,10 @@ def linear_activation_backward(dA,cache,activation):
 	
 	if activation == "relu":
 		dZ = relu_backward(dA,activation_cache)
+		dA_prev, dW, db = linear_backward(dZ, linear_cache)
 	elif activation == "sigmoid":
 		dZ = sigmoid_backwards(dA,activation_cache)
-	
-	dA_prev,dW,db = linear_backward(dZ,linear_cache)
+		dA_prev,dW,db = linear_backward(dZ,linear_cache)
 	
 	return dA_prev,dW,db
 	
@@ -246,7 +314,7 @@ def predict(X,y,parameters):
 		else:
 			p[0,i] = 0
 	
-	print("Accuracy:" + str(np.sum((p==y)/m)))
+	print("Accuracy:" + str(round(np.sum((p==y)/m)),2))
 	
 	return p
 
